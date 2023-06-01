@@ -1,4 +1,4 @@
-from polynomial import polynomial
+from polynomials import Polynomial
 
 p = Polynomial({
     0: 1,
