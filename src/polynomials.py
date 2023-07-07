@@ -246,3 +246,24 @@ class Polynomial:
       print(f'The polynomial is concave upward at the point x = {x}')
     elif second_derivative_at_x < 0:
       print(f'the polynomial is concave downwards at the point x = {x}')
+
+
+  def newtons_method(self, x, max_iter = int(1e4), tol = 1e-6) -> float:
+    '''Apply Newton's method to find the root of a polynomial.'''
+    x_n = x
+    polynomial_at_x = self.value_at_x(x)
+    derivative_at_x = self.derivative_at_x(x)
+    x_n1 = x - (polynomial_at_x / derivative_at_x)
+    if derivative_at_x == 0:
+      raise ValueError("Derivative equals zero. Newton's method does not converge.")
+
+    for iter in range(max_iter):
+      if abs(x_n1 - x_n) < tol:
+        return x_n1
+      x_n = x_n1
+      polynomial_at_x = self.value_at_x(x_n)
+      derivative_at_x = self.derivative_at_x(x_n)
+      if derivative_at_x == 0:
+        raise ValueError("Derivative equals zero. Newton's method does not converge.")
+      x_n1 = x_n - (polynomial_at_x / derivative_at_x)
+    raise ValueError("Maximum number of iterations reached.  Newton's method does not converge")
