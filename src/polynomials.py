@@ -151,3 +151,53 @@ class Polynomial:
     for degree, coefficient in second_polynomial.items():
       subtraction[degree] = subtraction.get(degree, 0) - coefficient
     return subtraction
+  
+  
+  def multiplying_two_polynomials(self, second_polynomial) -> dict:
+    '''Calculates the multiplication of two polynomials.'''
+    if type(self.polynomial) == str:
+      polynomial = self.dict_polynomial(self.polynomial)
+    else:
+      polynomial = self.polynomial
+    if type(second_polynomial) == str:
+      second_polynomial = self.dict_polynomial(second_polynomial)
+
+    product = {}
+    for degree, coefficient in polynomial.items():
+      for degree2, coefficient2 in second_polynomial.items():
+        product[degree + degree2] = product.get(degree + degree2, 0) + coefficient * coefficient2
+    return product
+
+
+  def division_of_two_polynomials(self, divisor) -> dict:
+    '''Performs the division of two polynomials and returns the quotient.'''
+    if type(self.polynomial) == str:
+      polynomial = self.dict_polynomial(self.polynomial)
+    else:
+      polynomial = self.polynomial
+    if type(divisor) == str:
+      divisor = self.dict_polynomial(divisor)
+
+    quotient = {}
+    remainder = polynomial.copy()
+    dividend_degree = max(polynomial.keys())
+    divisor_degree = max(divisor.keys())
+    while dividend_degree >= divisor_degree:
+      current_degree = dividend_degree - divisor_degree
+      current_coefficient = remainder[dividend_degree] / divisor[divisor_degree]
+      quotient[current_degree] = current_coefficient
+      for degree, coefficient in divisor.items():
+        remainder_degree = degree + current_degree
+        remainder_coefficient = coefficient * current_coefficient
+        if remainder_degree in remainder:
+          remainder[remainder_degree] -= remainder_coefficient
+        else:
+          remainder[remainder_degree] = -remainder_coefficient
+
+      del remainder[dividend_degree]
+      if remainder:
+        dividend_degree = max(remainder.keys())
+      else:
+        dividend_degree = 0
+
+    return quotient
