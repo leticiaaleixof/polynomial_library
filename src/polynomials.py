@@ -1,45 +1,54 @@
-import json
+import matplotlib.pyplot as plt
 
 class Polynomial:
-    '''
-    The initialization recieves a dict where the
+  def __init__(self, polynomial):
+    '''The initialization recieves a dict where the
     indexes are non-negative degrees and the values
-    are the coeficients
-    '''
-    def __init__(self, coef_at_degree):
-        self.coef_at_degree = coef_at_degree
+    are the coeficients, or a string in the format:
+    'ax^n + bx^(n-1) + ... + gx + h'. '''
+    self.polynomial = polynomial
 
-    '''
-    Evaluates the value of the polynomial at a given x.
-    '''
-    def eval(self, x):
-        value_at_x = 0
-        for degree in self.coef_at_degree:
-            value_at_x += self.coef_at_degree[degree] * x ** degree
-        return value_at_x
 
-    '''
-    Return the polynomial corresponding to the
-    symbolic integral of self.
-    The parameter constant can be used to set the
-    coefficiente at degree zero.
-    '''
-    def symbolic_integrate(self, constant = 0):
-        int_coef_at_degree = {}
-        for degree in self.coef_at_degree:
-            int_coef_at_degree[degree+1] = self.coef_at_degree[degree]/degree+1
-        return Polynomial(int_coef_at_degree)
-
-    def interval_integrate(self, interval):
-        integral = symbolic_integrate()
-        a, b = interval
-        return interval.eval(b) - integral.eval(a)
-
-    def symbolic_derivate(self):
-        return Polynomial((degree-1: self.coef_at_degree))
-
-    '''
-    Save Polynomial 
-    '''
-    def save_as_json(self, filename):
-        json.dump(self.coef_at_degree, open(f"data/{filename}", "w"))
+  def string_polynomial(self, polynomial = None):
+    '''return the polynomial as a string.'''
+    if polynomial == None:
+      polynomial = self.polynomial
+    p = [] #list with separate terms of the polynomial
+    for i in polynomial:
+      if polynomial[i] > 0 and polynomial[i] < 1:
+        p.append(f'+{polynomial[i]}x^{i}')
+      elif polynomial[i] < 0 and polynomial[i] > -1:
+        p.append(f'{polynomial[i]}x^{i}')
+      # cases where the coefficient is equal to 1 or -1 and it is unnecessary to show it
+      if polynomial[i] == 1 and i != 0 and i != 1:
+        p.append(f'+x^{i}')
+      elif polynomial[i] == 1 and i == 1:
+        p.append(f'+x')
+      if polynomial[i] == -1 and i != 0 and i != 1:
+        p.append(f'-x^{i}')
+      elif polynomial[i] == -1 and i == 1:
+        p.append(f'-x')
+      if polynomial[i] > 1 and i != 0 and i != 1:
+        p.append(f'+{polynomial[i]}x^{i}')
+      elif polynomial[i] < -1 and i != 0 and i != 1:
+        p.append(f'{polynomial[i]}x^{i}')
+      # cases where the exponent is equal to 1, and it is unnecessary to show it
+      if polynomial[i] > 1 and i == 1:
+        p.append(f'+{polynomial[i]}x')
+      elif polynomial[i] < -1 and i== 1:
+        p.append(f'{polynomial[i]}x')
+      if polynomial[i] == 0 and i == 0:
+        p.append(' ')
+      # cases where the exponent is equal to 0:
+      if polynomial[i] > 0 and i == 0:
+        p.append(f'+{polynomial[i]}')
+      elif polynomial[i] < 0 and i == 0:
+        p.append(f'{polynomial[i]}')
+    delimiter = ''
+    polynomial = delimiter.join(p)
+    #if there is a "+" at the beginning of the polynomial, the sign will be erased
+    if polynomial[0] == '+':
+      polynomial = polynomial[1:]
+    if polynomial[len(polynomial)-1] == ' ':
+      polynomial = polynomial[:len(polynomial)-1]
+    return polynomial
