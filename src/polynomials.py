@@ -105,3 +105,14 @@ class Polynomial:
           dictionary[int(degree)] = float(coefficient)
     return dictionary
 
+  def value_at_x(self, x, polynomial = None) -> float:
+    '''Calculates the value of the polynomial at a given x-coordinate.'''
+    if polynomial == None:
+      polynomial = self.polynomial
+    if type(polynomial) == str:
+      polynomial = self.dict_polynomial(polynomial)
+
+    value = 0
+    for degree in polynomial:
+      value += polynomial[degree] * x ** degree
+    return value
