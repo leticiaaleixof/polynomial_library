@@ -227,3 +227,22 @@ class Polynomial:
     '''Calculates the derivative of a polynomial at a specific x-coordinate.'''
     derivative = self.derivative()
     return self.value_at_x(x, derivative)
+
+
+  def polynomial_behavior(self, x):
+    '''Determines the behavior of a polynomial at a given point.'''
+    if self.derivative_at_x(x) > 0:
+      print(f'The polynomial is increasing at the point x = {x}')
+    elif self.derivative_at_x(x) < 0:
+      print(f'The polynomial is decreasing at the point x = {x}')
+    else:
+      print(f'the polynomial has a stationary point at x = {x}')
+
+    first_derivative = self.derivative()
+    second_derivative = self.derivative(first_derivative)
+    second_derivative_at_x = self.value_at_x(x, second_derivative)
+
+    if second_derivative_at_x > 0:
+      print(f'The polynomial is concave upward at the point x = {x}')
+    elif second_derivative_at_x < 0:
+      print(f'the polynomial is concave downwards at the point x = {x}')
