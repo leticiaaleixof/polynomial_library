@@ -394,3 +394,47 @@ class Polynomial:
     subinterval_length = (b - a)/subintervals
     numerical_integral = (subinterval_length/3) * summation
     return numerical_integral
+  
+
+  def polynomial_graph(self, interval: list):
+    '''this function plots the graph of the polynomial over a given interval'''
+    x_points = self.x_points(interval, 1000)
+    plt.plot(x_points, self.y_points(interval, 10000, x_points), label='Polynomial')
+    plt.axhline(0, color='black', linestyle='-')
+    plt.legend(loc='upper left', fontsize='small')
+    plt.show()
+
+
+  def riemann_graph(self, interval: list, subintervals: int):
+    '''This function plots the Riemann sum graph for the numerical integration
+    using the specified number of subintervals. It shows the function curve and
+    the Riemann sum bars.'''
+    a = interval[0]
+    b = interval[1]
+    subinterval_length  = (b - a)/subintervals
+    fig, ax = plt.subplots(figsize=(7, 6))
+    x_points = self.x_points(interval, subintervals)
+    ax.set_xlim(a, b)
+    ax.plot(self.x_points(interval, 1000), self.y_points(interval, subintervals, self.x_points(interval, 1000)), color = 'black', label= 'Polynomial')
+    ax.bar(x_points, self.y_points(interval, subintervals, x_points), width = subinterval_length,
+           align = 'edge', edgecolor = 'darkblue', label= 'Riemann Sum')
+    ax.legend(loc='upper left', fontsize='small')
+
+
+  def trapezoidal_graph(self, interval: list, subintervals: int):
+    ''' This function plots the trapezoidal rule graph for the numerical
+    integration using the specified number of subintervals. It shows the
+    function curve and the trapezoids.'''
+    a = interval[0]
+    b = interval[1]
+    subintervals_length = (b - a)/1000
+    x_points = self.x_points(interval, 1000)
+    plt.plot(x_points, self.y_points(interval, subintervals, x_points), color = 'black', label= 'Polynomial')
+    x_points = self.x_points(interval, subintervals)
+    y_points = self.y_points(interval, subintervals, x_points)
+    plt.plot(x_points, y_points)
+    plt.fill_between(x_points, y_points, color='blue', alpha=0.1, label='trapezoids')
+    for x, y in zip(x_points, y_points):
+      plt.plot([x, x], [0, y], color='blue')
+    plt.legend(loc='upper left', fontsize='small')
+    plt.show()
