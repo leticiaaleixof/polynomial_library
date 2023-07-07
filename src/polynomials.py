@@ -105,6 +105,7 @@ class Polynomial:
           dictionary[int(degree)] = float(coefficient)
     return dictionary
 
+
   def value_at_x(self, x, polynomial = None) -> float:
     '''Calculates the value of the polynomial at a given x-coordinate.'''
     if polynomial == None:
@@ -116,3 +117,37 @@ class Polynomial:
     for degree in polynomial:
       value += polynomial[degree] * x ** degree
     return value
+  
+  
+  def sum_of_two_polynomials(self, second_polynomial) -> dict:
+    '''Calculates the sum of two polynomials.'''
+    if type(self.polynomial) == str:
+      polynomial = self.dict_polynomial(self.polynomial)
+    else:
+      polynomial = self.polynomial
+    if type(second_polynomial) == str:
+      second_polynomial = self.dict_polynomial(second_polynomial)
+
+    sum = {}
+    for degree, coefficient in polynomial.items():
+      sum[degree] = sum.get(degree, 0) + coefficient
+    for degree, coefficient in second_polynomial.items():
+      sum[degree] = sum.get(degree, 0) + coefficient
+    return sum
+
+
+  def subtraction_of_two_polynomials(self, second_polynomial) -> dict:
+    '''Calculates the subtraction of two polynomials.'''
+    if type(self.polynomial) == str:
+      polynomial = self.dict_polynomial(self.polynomial)
+    else:
+      polynomial = self.polynomial
+    if type(second_polynomial) == str:
+      second_polynomial = self.dict_polynomial(second_polynomial)
+
+    subtraction = {}
+    for degree, coefficient in polynomial.items():
+      subtraction[degree] = subtraction.get(degree, 0) + coefficient
+    for degree, coefficient in second_polynomial.items():
+      subtraction[degree] = subtraction.get(degree, 0) - coefficient
+    return subtraction
