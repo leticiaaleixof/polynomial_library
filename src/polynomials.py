@@ -293,3 +293,104 @@ class Polynomial:
     b = interval[1] # upper limit of integration
     integral = self.symbolic_integrate(polynomial)
     return self.value_at_x(b, integral) - self.value_at_x(a, integral)
+
+
+  def area_between_two_curves(self, second_polynomial, interval: list) -> float:
+    ''' returns the area between the curves of two polynomials. '''
+    return self.definite_integral(interval) - self.definite_integral(interval, second_polynomial)
+
+
+  def x_points(self, interval: list, subintervals) -> list:
+    """Calculates the x points of the integration interval.
+      Args:
+        - subintervals_length: Optional. The length of the subintervals.
+      If not provided, the default value is used.
+    """
+    a = interval[0]
+    b = interval[1]
+    subinterval_length = (b - a)/subintervals
+    x_points = []
+    x = a
+    while x <= b:
+      x_points.append(x)
+      x += subinterval_length
+    return x_points
+
+
+  def y_points(self, interval, subintervals, x_points = None) -> list:
+    """Calculates the y points corresponding to the x points of the integration
+    interval.
+      Args:
+        - x_points: Optional. A list containing the x points of the integration
+        interval. If not provided, the default value is used.
+    """
+    if x_points == None:
+      x_points = self.x_points(interval, subintervals)
+    y_points = []
+    for x in x_points:
+      y_points.append(self.value_at_x(x))
+    return y_points
+  
+
+  def riemann_sum(self, interval, subintervals) -> float:
+    '''Calculates the numerical integral using the Riemann sum.'''
+    if type(self.polynomial) == str:
+      polynomial = self.dict_polynomial(self.polynomial)
+    else:
+      polynomial = self.polynomial
+    a = interval[0]
+    b = interval[1]
+    subinterval_length = (b - a)/subintervals
+    y_points = self.y_points(interval, subintervals)
+    summation = 0
+    for y in y_points:
+      if y_points.index(y) < len(y_points)-1:
+        summation += y
+    integral = subinterval_length * summation
+    return integral
+  
+
+  def trapezoidal_rule(self, interval, subintervals) -> float:
+    '''Calculates the numerical integral using the trapezoidal rule.'''
+    if type(self.polynomial) == str:
+      polynomial = self.dict_polynomial(self.polynomial)
+    else:
+      polynomial = self.polynomial
+    a = interval[0]
+    b = interval[1]
+    subinterval_length = (b - a)/subintervals
+    y_points = self.y_points(interval, subintervals)
+    summation = 0
+    for index, y in enumerate(y_points):
+      if index == 0 or index == len(y_points)-1:
+        summation += y
+      else:
+        summation += 2 * y
+    integral = (subinterval_length / 2) * summation
+    return integral
+  
+
+  def simpsons_rule(self, interval, subintervals) -> float:
+    '''Calculates the numerical integral using Simpson's rule.
+      Returns:
+        The value of the numerical integral calculated using Simpson's rule.
+    '''
+    if type(self.polynomial) == str:
+      if type(self.polynomial) == str:
+        polynomial = self.dict_polynomial(self.polynomial)
+      else:
+        polynomial = self.polynomial
+    a = interval[0]
+    b = interval[1]
+    y_points = self.y_points(interval, subintervals)
+    summation = 0
+    for index, y in enumerate(y_points):
+      if index == 0 or index == len(y_points)-1:
+        summation += y
+      elif index % 2 == 0:
+        summation += 2 * y
+      else:
+        summation += 4 * y
+    subinterval_length = (b - a)/subintervals
+    numerical_integral = (subinterval_length/3) * summation
+    return numerical_integral
