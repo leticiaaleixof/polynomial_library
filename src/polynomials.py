@@ -268,7 +268,7 @@ class Polynomial:
       x_n1 = x_n - (polynomial_at_x / derivative_at_x)
     raise ValueError("Maximum number of iterations reached.  Newton's method does not converge")
   
-  
+
   def symbolic_integration(self, polynomial = None) -> dict:
     '''calculates the integration of a polynomial.
     Returns:
@@ -283,3 +283,13 @@ class Polynomial:
       coefficient = polynomial[term]/degree
       integral[degree] = coefficient
     return integral
+  
+
+  def definite_integral(self, interval: list, polynomial = None) -> float:
+    '''returns the definite integral using the fundamental theorem of calculus.'''
+    if polynomial == None:
+      polynomial = self.polynomial
+    a = interval[0] # lower limit of integration
+    b = interval[1] # upper limit of integration
+    integral = self.symbolic_integrate(polynomial)
+    return self.value_at_x(b, integral) - self.value_at_x(a, integral)
