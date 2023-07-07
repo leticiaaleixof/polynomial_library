@@ -152,7 +152,7 @@ class Polynomial:
       subtraction[degree] = subtraction.get(degree, 0) - coefficient
     return subtraction
   
-  
+
   def multiplying_two_polynomials(self, second_polynomial) -> dict:
     '''Calculates the multiplication of two polynomials.'''
     if type(self.polynomial) == str:
@@ -201,3 +201,29 @@ class Polynomial:
         dividend_degree = 0
 
     return quotient
+  
+
+  def derivative(self) -> dict:
+    '''Calculates the derivative of a polynomial.
+    Returns:
+      dict: The polynomial representing the derivative of
+      the original polynomial.'''
+    if type(self.polynomial) == str:
+      polynomial = self.dict_polynomial(self.polynomial)
+    else:
+      polynomial = self.polynomial
+    derivative = {}
+    for degree in polynomial:
+      if degree == 0:
+        pass
+      elif degree > 0:
+        coefficient = polynomial[degree]*degree
+        degree = degree-1
+        derivative[degree] = coefficient
+    return derivative
+  
+
+  def derivative_at_x(self, x) -> float:
+    '''Calculates the derivative of a polynomial at a specific x-coordinate.'''
+    derivative = self.derivative()
+    return self.value_at_x(x, derivative)
